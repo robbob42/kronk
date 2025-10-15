@@ -8,23 +8,29 @@ from app.models import Completion, Transaction
 @bp.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json() or {}
-    if 'name' not in data:
+    if 'name' not in data or not data['name'].strip():
         return jsonify({'error': 'Missing name'}), 400
     if User.query.filter_by(name=data['name']).first():
-        return jsonify({'error': 'User already exists'}), 400
+        return jsonify({'error': 'User with this name already exists'}), 400
     
-    user = User(name=data['name'])
+    # Check if email is provided and if it's already in use
+    email = data.get('email')
+    if email and User.query.filter_by(email=email).first():
+        return jsonify({'error': 'Email is already in use'}), 400
+
+    # Create the user with the name and email
+    user = User(name=data['name'], email=email)
     db.session.add(user)
     db.session.commit()
     
-    response = jsonify(
-        {
-            'id': user.id,
-            'name': user.name,
-            'balance': user.balance
-        }
-    )
-    response.status_code = 201 # 201 = Created
+    # Update the response to include the email
+    response = jsonify({
+        'id': user.id,
+        'name': user.name,
+        'email': user.email,
+        'balance': user.balance
+    })
+    response.status_code = 201
     return response
 
 @bp.route('/projects', methods=['POST'])

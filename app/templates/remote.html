@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kronk Remote</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { padding: 1.5rem; }
+        .remote-container { max-width: 400px; margin: 0 auto; }
+        .balance-display { background-color: var(--container-dark); padding: 2rem; border-radius: 8px; text-align: center; margin-bottom: 2rem; }
+        .balance-display h2 { margin: 0 0 0.5rem 0; color: #ccc; font-size: 1rem; }
+        .balance-display p { margin: 0; font-size: 3rem; font-weight: bold; color: var(--money-green); }
+        .spend-form h3 { text-align: center; }
+        .spend-form input { width: 100%; box-sizing: border-box; padding: 1rem; font-size: 1.5rem; text-align: center; background: var(--bg-dark); color: var(--text-light); border: 1px solid #555; border-radius: 4px; margin-bottom: 1rem; }
+        .spend-form button { width: 100%; padding: 1rem; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <div class="remote-container">
+        <div class="balance-display">
+            <h2>{{ user.name }}'s Balance</h2>
+            <p>${{ "%.2f"|format(user.balance) }}</p>
+        </div>
+        <form id="spendForm" class="spend-form">
+            <h3>Enter Amount Spent</h3>
+            <input type="number" id="amount" step="0.01" placeholder="0.00" required>
+            <button type="submit" class="button button-primary">Submit Spending</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('spendForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+            const response = await fetch('/api/users/{{ user.id }}/spend', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: amount })
+            });
+            if (response.ok) {
+                alert('Spending recorded successfully!');
+                window.location.reload();
+            } else {
+                alert('Error recording spending.');
+            }
+        });
+    </script>
+</body>
+</html>

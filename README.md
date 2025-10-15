@@ -10,6 +10,7 @@ The application is built to run on a Raspberry Pi, turning a simple touchscreen 
 * **User Balances:** Each family member has an account that tracks their earnings and spending.
 * **Touchscreen UI:** A clean, 7-inch touchscreen interface for completing projects and viewing balances.
 * **Uneven Reward Splits:** An intuitive "shares" system allows for fair, uneven reward distribution on group projects.
+* **Secure Remote Access:** Use a Cloudflare Tunnel to safely view balances and record spending from your phone anywhere in the world.
 * **Admin Panel:** A separate web interface for adding/archiving users and projects.
 * **Fun Screensaver:** An idle-mode screensaver featuring quotes, recipes, and fun prompts to add personality to your kitchen.
 * **Secure & Robust:** Uses a production-ready stack (Gunicorn + Nginx) for reliable 24/7 operation.
@@ -19,8 +20,10 @@ The application is built to run on a Raspberry Pi, turning a simple touchscreen 
 * **Backend:** Python 3, Flask
 * **Database:** SQLite with Flask-SQLAlchemy and Flask-Migrate
 * **Frontend:** HTML, CSS, vanilla JavaScript
-* **WSGI Server:** Gunicorn
-* **Reverse Proxy:** Nginx
+* **Deployment:**
+    * **WSGI Server:** Gunicorn
+    * **Reverse Proxy:** Nginx
+    * **Secure Tunnel:** Cloudflare Tunnels
 * **Dependency Management:** Pipenv
 
 ## 📁 Project Structure
@@ -49,10 +52,9 @@ The application is built to run on a Raspberry Pi, turning a simple touchscreen 
 └── kronk.py
 
 ```
-
 ## 💻 Development Environment Setup
 
-Follow these steps to run Kronk on a local development machine (e.g., Mac, Windows, or Linux).
+Follow these steps to run Kronk on a local development machine.
 
 1.  **Clone the Repository:**
     ```bash
@@ -231,6 +233,92 @@ This will make the Pi automatically launch Kronk in a full-screen browser on sta
     ```
 
 A final reboot (`sudo reboot`) will apply all changes and launch Kronk in kiosk mode.
+
+### Step 7: Configure Secure Remote Access (Cloudflare Tunnel)
+
+This process creates a secure connection from the internet to your Raspberry Pi without opening any ports on your router. You will need your own registered domain name to complete this step.
+
+#### A. Point Your Domain to Cloudflare
+
+1.  Log in to your domain registrar (e.g., GoDaddy, Namecheap).
+2.  Log in to your Cloudflare account and **Add a Site**, entering your domain (e.g., `your-domain.com`).
+3.  Cloudflare will provide you with two new **nameservers**.
+4.  In your domain registrar's DNS settings, replace the existing nameservers with the ones provided by Cloudflare.
+5.  Wait for Cloudflare to confirm that your site is active. This can take a few minutes to a few hours.
+
+#### B. Create and Install the Cloudflare Tunnel
+
+1.  From the Cloudflare dashboard, go to the **Zero Trust** dashboard.
+2.  Navigate to **Access > Tunnels** and click **Create a tunnel**.
+3.  Give the tunnel a name (e.g., `kronk-pi`) and save it.
+4.  Choose your environment (**Debian**, **64-bit**) and copy the installation command provided.
+5.  SSH into your Raspberry Pi, then paste and run the copied command to install and configure the `cloudflared` service.
+
+#### C. Configure the Hostname Route
+
+1.  Back in the Cloudflare Tunnels dashboard, click **Configure** on your new tunnel.
+2.  Select the **Public Hostname** tab and click **Add a public hostname**.
+3.  Fill out the details:
+    * **Subdomain:** `kronk` (or your preferred subdomain)
+    * **Domain:** `your-domain.com`
+    * **Service Type:** `HTTP`
+    * **URL:** `localhost:80`
+4.  Click **Save hostname**. Cloudflare will automatically create the necessary DNS record.
+
+#### D. Secure the Application with Cloudflare Access
+
+1.  In the Zero Trust dashboard, go to **Access > Applications** and click **Add an application**.
+2.  Choose **Self-hosted**.
+3.  Set the **Application name** (e.g., `Kronk Remote`) and select `kronk.your-domain.com` for the domain.
+4.  On the next screen, create a policy:
+    * **Policy name:** `Family Access`
+    * **Action:** `Allow`
+    * **Rule:** Set the Selector to `Emails` and enter the email addresses of your family members.
+5.  Save the rule and add the application.
+
+#### E. Configure Nginx for Remote Redirects
+
+This final step tells Nginx to show the `/remote` page to authenticated users.
+
+1.  **Edit your main Nginx config file:**
+    ```bash
+    sudo nano /etc/nginx/nginx.conf
+    ```
+2.  Inside the `http { ... }` block, add the following `map`:
+    ```nginx
+    map $http_cf_access_authenticated_user_email:$request_uri $redirect_to_remote {
+        default 0;
+        "~. .:(/|/index.html)" 1;
+    }
+    ```
+
+3.  **Edit your Kronk site config file:**
+    ```bash
+    sudo nano /etc/nginx/sites-available/kronk
+    ```
+4.  Add the `if` block to your `server` configuration:
+    ```nginx
+    server {
+        listen 80;
+        # ...
+
+        if ($redirect_to_remote) {
+            rewrite ^/$ /remote last;
+        }
+
+        location / {
+            # ... proxy_pass details ...
+        }
+        
+        # ... other locations ...
+    }
+    ```
+
+5.  **Test and restart Nginx:**
+    ```bash
+    sudo nginx -t
+    sudo systemctl restart nginx
+    ```
 
 ## 🚀 Usage
 

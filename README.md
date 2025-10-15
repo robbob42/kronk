@@ -31,10 +31,10 @@ The application is built to run on a Raspberry Pi, turning a simple touchscreen 
 /kronk
 ├── app/
 │   ├── api/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   └── routes.py
 │   ├── main/
-│   │   ├── init.py
+│   │   ├── __init__.py
 │   │   └── routes.py
 │   ├── static/
 │   │   ├── css/
@@ -42,8 +42,9 @@ The application is built to run on a Raspberry Pi, turning a simple touchscreen 
 │   │   └── js/
 │   ├── templates/
 │   │   ├── admin.html
-│   │   └── index.html
-│   ├── init.py
+│   │   ├── index.html
+│   │   └── remote.html
+│   ├── __init__.py
 │   └── models.py
 ├── migrations/
 ├── Pipfile

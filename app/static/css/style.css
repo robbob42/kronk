@@ -1,0 +1,315 @@
+/* app/static/css/style.css */
+:root {
+    --bg-dark: #1a1a1a;
+    --container-dark: #2c2c2c;
+    --text-light: #f0f0f0;
+    --accent-blue: #007bff;
+    --money-green: #28a745;
+    --money-red: #dc3545;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 1rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* --- Header --- */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    gap: 1rem; /* Space between image and text */
+}
+
+.mascot {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: var(--accent-blue);
+}
+
+/* --- Tab Navigation --- */
+.tab-nav {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.tab-button {
+    flex-grow: 1;
+    padding: 1rem;
+    font-size: 1.2rem;
+    background-color: var(--container-dark);
+    color: #aaa; /* Dimmer color for inactive tabs */
+    border: 1px solid var(--bg-dark);
+    border-bottom: 3px solid var(--container-dark); /* Match thickness */
+    cursor: pointer;
+    transition: color 0.2s; /* Smooth transition */
+}
+
+.tab-button.active {
+    background-color: var(--bg-dark);
+    border-bottom: 3px solid var(--accent-blue); /* Thicker border */
+    color: var(--accent-blue); /* Bright accent color for text */
+    font-weight: bold; /* Make text bold */
+    font-size: 1.4rem;
+}
+
+/* --- Content Lists --- */
+.list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--container-dark);
+    color: var(--text-light);
+    border: none;
+    padding: 1.5rem; /* Large padding for easy tapping */
+    border-radius: 8px;
+    font-size: 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.list-item:hover {
+    background-color: #3d3d3d;
+}
+
+.money-value {
+    font-weight: bold;
+}
+
+.positive {
+    color: var(--money-green);
+}
+
+.negative {
+    color: var(--money-red);
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+    position: fixed; /* Sit on top of the page content */
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); /* Black with opacity */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--container-dark);
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+#modalTitle {
+    margin: 0;
+}
+
+.close-button {
+    color: #aaa;
+    background: none;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: var(--text-light);
+}
+
+.transaction-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.transaction-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #444;
+}
+
+.transaction-list li:last-child {
+    border-bottom: none;
+}
+
+.action-button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-light);
+    background-color: var(--accent-blue);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.action-button:hover {
+    opacity: 0.9;
+}
+
+.user-select-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.user-select-list li {
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.user-select-list input {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+}
+
+/* --- Screensaver Styles --- */
+.screensaver-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.screensaver-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    color: #f0f0f0;
+    opacity: 0; /* Start invisible for fade-in */
+    transition: opacity 1.5s ease-in-out;
+}
+
+.screensaver-content img {
+    max-width: 200px;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.screensaver-content p {
+    font-size: 1.8rem;
+    font-style: italic;
+    max-width: 600px;
+    line-height: 1.4;
+}
+
+.screensaver-content .whisper {
+    font-size: 1.8rem;
+    font-style: italic;
+    max-width: 600px;
+    line-height: 1.4;
+}
+
+.screensaver-content .angel-text {
+    color: #aaccff; /* Soft, light blue */
+    margin-bottom: 2rem;
+}
+
+.screensaver-content .devil-text {
+    color: #ffaaaa; /* Subtle, mischievous red */
+    margin-top: 2rem;
+}
+
+.user-share-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.user-select-list .user-share-wrapper label {
+    flex-grow: 1; /* Give label space to grow */
+}
+
+.shares-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.share-button {
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Makes it circular */
+    width: 40px;   /* Large touch target */
+    height: 40px;  /* Large touch target */
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 40px; /* Vertically center the +/- symbol */
+}
+
+.share-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 20px; /* Prevents layout shift */
+    text-align: center;
+}
+
+.calculated-split {
+    font-weight: bold;
+    color: var(--money-green);
+    min-width: 70px; /* Prevents layout shift */
+    text-align: right;
+}

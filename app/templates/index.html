@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kronk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <script src="{{ url_for('static', filename='js/screensaver-content.js') }}" defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <img src="{{ url_for('static', filename='images/kronk_mascot.png') }}" alt="Kronk Mascot" class="mascot">
+            <h1>KRONK</h1>
+        </header>
+
+        <nav class="tab-nav">
+            <button id="projectsTab" class="tab-button active">Projects</button>
+            <button id="usersTab" class="tab-button">Users</button>
+        </nav>
+
+        <main id="contentArea">
+            <div id="projectsContainer" class="list-container">
+                <button class="list-item">
+                    <span>Rake the Front Yard</span>
+                    <span class="money-value positive">$10.00</span>
+                </button>
+                <button class="list-item">
+                    <span>Organize the Garage</span>
+                    <span class="money-value positive">$25.00</span>
+                </button>
+                <button class="list-item">
+                    <span>Weed the Garden</span>
+                    <span class="money-value positive">$15.00</span>
+                </button>
+            </div>
+
+            <div id="usersContainer" class="list-container" style="display: none;">
+                <button class="list-item">
+                    <span>Alex</span>
+                    <span class="money-value">$52.75</span>
+                </button>
+                 <button class="list-item">
+                    <span>Beth</span>
+                    <span class="money-value">$12.50</span>
+                </button>
+                <button id="manualScreensaverBtn" class="list-item">Start Screensaver</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button id="closeModal" class="close-button">&times;</button>
+            </div>
+            <div id="modalBody" class="modal-body">
+                </div>
+        </div>
+    </div>
+
+    <!-- Add this new screensaver div -->
+    <div id="screensaver" class="screensaver-overlay" style="display: none;">
+        <div id="screensaverContent" class="screensaver-content">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

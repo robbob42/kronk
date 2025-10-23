@@ -164,9 +164,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const switchToProjectsTab = () => { tabNav.classList.remove('users-active'); projectsTab.classList.add('active'); usersTab.classList.remove('active'); projectsContainer.style.display = 'flex'; usersContainer.style.display = 'none'; fetchData('projects').then(renderProjects); };
     const switchToUsersTab = () => { tabNav.classList.add('users-active'); usersTab.classList.add('active'); projectsTab.classList.remove('active'); usersContainer.style.display = 'flex'; projectsContainer.style.display = 'none'; fetchData('users').then(renderUsers); };
     const handleSpendMoney = (userId) => { const amount = prompt('Enter amount to spend:'); if (amount === null || isNaN(amount) || parseFloat(amount) <= 0) { alert('Please enter a valid amount.'); return; } postData(`users/${userId}/spend`, { amount: parseFloat(amount) }).then(response => { console.log(response); hideModal(); switchToUsersTab(); }); };
+    const refreshActiveData = () => {
+        // Only refresh if the modal is hidden!
+        if (modal.style.display !== 'none') {
+            console.log("Modal is open, skipping refresh.");
+            return;
+        }
+
+        console.log("Refreshing data...");
+        // Check which tab is active and refresh its data
+        if (projectsTab.classList.contains('active')) {
+            fetchData('projects').then(renderProjects);
+        } else if (usersTab.classList.contains('active')) {
+            fetchData('users').then(renderUsers);
+        }
+    };
     const initializeApp = () => { Promise.all([fetchData('users'), fetchData('projects')]).then(([users, projects]) => { renderUsers(users); renderProjects(projects); projectsTab.classList.add('active'); projectsContainer.style.display = 'flex'; }); };
     projectsTab.addEventListener('click', switchToProjectsTab); usersTab.addEventListener('click', switchToUsersTab); closeModal.addEventListener('click', hideModal); modal.addEventListener('click', (e) => { if (e.target === modal) { hideModal(); } }); modalBody.addEventListener('click', (e) => { const completeBtn = e.target.closest('#completeProjectBtn'); const spendBtn = e.target.closest('#spendMoneyBtn'); if (completeBtn) { handleCompleteProject(parseInt(completeBtn.dataset.projectId)); } else if (spendBtn) { handleSpendMoney(parseInt(spendBtn.dataset.userId)); } }); projectsContainer.addEventListener('click', (e) => { const projectButton = e.target.closest('.list-item'); if (projectButton) { showProjectDetails(parseInt(projectButton.dataset.id)); } }); usersContainer.addEventListener('click', (e) => { const userButton = e.target.closest('.list-item'); if (userButton && userButton.id !== 'manualScreensaverBtn') { showUserDetails(parseInt(userButton.dataset.id)); } });
     window.addEventListener('mousemove', resetIdleTimer); window.addEventListener('mousedown', resetIdleTimer); window.addEventListener('keypress', resetIdleTimer); window.addEventListener('touchmove', resetIdleTimer); screensaver.addEventListener('click', stopScreensaver); manualScreensaverBtn.addEventListener('click', startScreensaver);
     initializeApp();
     resetIdleTimer();
+    // Auto-refresh data every 5 minutes
+    const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+    setInterval(refreshActiveData, REFRESH_INTERVAL);
 });

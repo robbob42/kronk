@@ -44,29 +44,67 @@ body {
 }
 
 /* --- Tab Navigation --- */
+/* This is the main tab bar, which acts as the "track" */
 .tab-nav {
     display: flex;
     margin-bottom: 1rem;
+    background-color: #002850; /* Dark blue theme background */
+    border-radius: 8px;
+    position: relative; /* Context for the sliding pill */
+    overflow: hidden; /* Keeps the pill inside the rounded corners */
+}
+
+/* This is the sliding pill element */
+.tab-nav::before {
+    content: '';
+    position: absolute;
+    /* Inset the pill slightly */
+    top: 10px;
+    left: 10px;
+    width: calc(50% - 10px); /* 50% width, minus left padding */
+    height: calc(100% - 20px); /* 100% height, minus top/bottom padding */
+
+    /* Active state appearance */
+    background-color: #405a75; /* Light theme color */
+    border: 1px solid #cccccc; /* Light gray border */
+    border-radius: 6px;
+
+    z-index: 1; /* Behind the text */
+    
+    /* THE ANIMATION! */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* This class tells the pill to slide */
+.tab-nav.users-active::before {
+    /* * Moves the pill 100% of its own width + 4px for the
+     * space between (it started at left: 4px).
+     * 100% of calc(50% - 4px) + 4px isn't quite right.
+     * Let's use 100% of the parent's 50% width.
+     * We'll move it by 50% of the parent + 4px padding.
+     * ...Simpler: move it 100% of its own width + 8px (4px left pad, 4px right pad)
+     */
+     transform: translateX(calc(100%));
 }
 
 .tab-button {
     flex-grow: 1;
     padding: 2rem;
     font-size: 1.6rem;
-    background-color: var(--container-dark);
-    color: #aaa; /* Dimmer color for inactive tabs */
-    border: 1px solid var(--bg-dark);
-    border-bottom: 3px solid var(--container-dark); /* Match thickness */
+    background-color: transparent;
+    color: #5c7a98;
+    border: none;
     cursor: pointer;
-    transition: color 0.2s; /* Smooth transition */
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s ease-in-out;
 }
 
+/* The active tab's text */
 .tab-button.active {
-    background-color: var(--bg-dark);
-    border-bottom: 3px solid var(--accent-blue); /* Thicker border */
-    color: var(--accent-blue); /* Bright accent color for text */
-    font-weight: bold; /* Make text bold */
-    font-size: 1.4rem;
+    color: #deddea;
+    background-color: transparent;
+    border-bottom: none;
 }
 
 /* --- Content Lists --- */

@@ -51,8 +51,8 @@ body {
 
 .tab-button {
     flex-grow: 1;
-    padding: 1rem;
-    font-size: 1.2rem;
+    padding: 2rem;
+    font-size: 1.6rem;
     background-color: var(--container-dark);
     color: #aaa; /* Dimmer color for inactive tabs */
     border: 1px solid var(--bg-dark);
@@ -83,9 +83,9 @@ body {
     background-color: var(--container-dark);
     color: var(--text-light);
     border: none;
-    padding: 1.5rem; /* Large padding for easy tapping */
+    padding: 2rem; /* Large padding for easy tapping */
     border-radius: 8px;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     text-align: left;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -180,8 +180,8 @@ body {
 
 .action-button {
     width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
+    padding: 1.5rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: var(--text-light);
     background-color: var(--accent-blue);
@@ -292,12 +292,12 @@ body {
     color: white;
     border: none;
     border-radius: 50%; /* Makes it circular */
-    width: 40px;   /* Large touch target */
-    height: 40px;  /* Large touch target */
-    font-size: 1.5rem;
+    width: 44px;   /* Large touch target */
+    height: 44px;  /* Large touch target */
+    font-size: 2rem;
     font-weight: bold;
     cursor: pointer;
-    line-height: 40px; /* Vertically center the +/- symbol */
+    line-height: 44px; /* Vertically center the +/- symbol */
 }
 
 .share-value {

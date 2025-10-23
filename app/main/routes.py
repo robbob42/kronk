@@ -8,7 +8,7 @@ def index():
 
 @bp.route('/admin')
 def admin():
-    projects = Project.query.filter_by(is_active=True).order_by(Project.priority).all()
+    projects = Project.query.filter_by(is_active=True).order_by(Project.status.asc(), Project.priority.asc()).all()
     users = User.query.filter_by(is_active=True).order_by(User.name).all()
     return render_template('admin.html', projects=projects, users=users)
 

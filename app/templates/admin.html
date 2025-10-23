@@ -67,7 +67,11 @@
                         <td>{{ project.name }}</td>
                         <td>${{ "%.2f"|format(project.value) }}</td>
                         <td>{{ project.status }}</td>
-                        <td><button class="button button-danger" data-id="{{ project.id }}" data-name="{{ project.name }}">Archive</button></td>
+                        <td>
+                            {% if project.status != 'completed' %}
+                            <button class="button button-danger" data-id="{{ project.id }}" data-name="{{ project.name }}">Archive</button>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

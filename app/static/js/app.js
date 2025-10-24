@@ -24,13 +24,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let idleTimer; let screensaverInterval; const IDLE_TIMEOUT = 300000; const CONTENT_CHANGE_INTERVAL = 20000;
     const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
     const showRandomContent = () => { screensaverContent.style.opacity = 0; setTimeout(() => { const contentTypes = ['quote', 'whisper', 'recipe']; const randomType = getRandomItem(contentTypes); let html = ''; if (randomType === 'quote') { const item = getRandomItem(KRONK_QUOTES); html = `<p class="whisper">"${item}"</p>`; } else if (randomType === 'whisper') { const isAngel = Math.random() < 0.5; if (isAngel) { const item = getRandomItem(ANGEL_WHISPERS); html = `<p class="whisper angel-text">${item}</p><img src="static/images/kronk-ethics.jpg" alt="Angel and Devil Kronk">`; } else { const item = getRandomItem(DEVIL_WHISPERS); html = `<img src="static/images/kronk-ethics.jpg" alt="Angel and Devil Kronk"><p class="whisper devil-text">${item}</p>`; } } else if (randomType === 'recipe') { const item = getRandomItem(SPINACH_PUFF_RECIPE); html = `<img src="static/images/kronk-spinach-puffs.jpg" alt="Kronk's Spinach Puffs"><p class="whisper">${item.text}</p>`; } screensaverContent.innerHTML = html; screensaverContent.style.opacity = 1; }, 1500); };
-    const startScreensaver = () => { screensaver.style.display = 'flex'; showRandomContent(); screensaverInterval = setInterval(showRandomContent, CONTENT_CHANGE_INTERVAL); };
+    const startScreensaver = () => {
+        screensaver.style.display = 'flex';
+        document.body.classList.add('screensaver-active'); // <-- ADD THIS LINE
+        showRandomContent();
+        screensaverInterval = setInterval(showRandomContent, CONTENT_CHANGE_INTERVAL);
+    };
     const stopScreensaver = () => {
-            screensaver.style.display = 'none';
-            clearInterval(screensaverInterval);
-            resetIdleTimer();
-            refreshActiveData();
-        };
+        screensaver.style.display = 'none';
+        document.body.classList.remove('screensaver-active'); // <-- ADD THIS LINE
+        clearInterval(screensaverInterval);
+        resetIdleTimer();
+        refreshActiveData();
+    };
     const resetIdleTimer = () => { clearTimeout(idleTimer); idleTimer = setTimeout(startScreensaver, IDLE_TIMEOUT); };
     const fetchData = async (endpoint) => { const response = await fetch(`/api/${endpoint}`); if (!response.ok) { console.error(`Error fetching ${endpoint}:`, response.statusText); return []; } return await response.json(); };
     const postData = async (endpoint, data) => { const response = await fetch(`/api/${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data), }); return response.json(); };

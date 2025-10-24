@@ -382,9 +382,3 @@ body::-webkit-scrollbar-thumb:hover {
 body.screensaver-active::-webkit-scrollbar {
     display: none; /* Hides the scrollbar */
 }
-
-/* Fallbacks for other browsers */
-body.screensaver-active {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}

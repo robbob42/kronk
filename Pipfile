@@ -9,6 +9,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 gunicorn = "*"
 gpiozero = "*"
+lgpio = "*"
 
 [dev-packages]
 

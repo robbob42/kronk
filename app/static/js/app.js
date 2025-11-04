@@ -198,4 +198,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-refresh data every 5 minutes
     const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
     setInterval(refreshActiveData, REFRESH_INTERVAL);
+
+    // --- Display Dimming Logic ---
+    const pollDisplayState = async () => {
+        try {
+            const response = await fetch('/api/display_state');
+            const data = await response.json();
+            
+            if (data.state === 'dim') {
+                document.body.classList.add('is-dim');
+            } else {
+                document.body.classList.remove('is-dim');
+            }
+        } catch (error) {
+            console.error("Could not fetch display state:", error);
+            document.body.classList.remove('is-dim'); // Default to bright on error
+        }
+    };
+
+    // Poll the display state every 5 seconds
+    setInterval(pollDisplayState, 5000);
+    // Run it once on load
+    pollDisplayState();
 });

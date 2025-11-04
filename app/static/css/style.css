@@ -382,3 +382,12 @@ body::-webkit-scrollbar-thumb:hover {
 body.screensaver-active::-webkit-scrollbar {
     display: none; /* Hides the scrollbar */
 }
+
+body.is-dim {
+    /* Dims the entire UI */
+    filter: brightness(0.3);
+    
+    /* Prevents any interaction with the dimmed screen */
+    /* Comment this out if you still want to use the dim screen */
+    /* pointer-events: none; */ 
+}

@@ -193,3 +193,13 @@ def archive_user(user_id):
     user.is_active = False # Set to inactive instead of deleting
     db.session.commit()
     return jsonify({'message': 'User archived successfully.'})
+
+@bp.route('/display_state', methods=['GET'])
+def get_display_state():
+    state_file = "/tmp/kronk_display.state"
+    try:
+        with open(state_file, "r") as f:
+            state = f.read().strip()
+        return jsonify({'state': state})
+    except FileNotFoundError:
+        return jsonify({'state': 'bright'}) # Default to bright if file not found

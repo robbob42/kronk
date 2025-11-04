@@ -4,7 +4,7 @@ from gpiozero import DigitalInputDevice
 from signal import pause
 
 # --- CONFIGURATION ---
-GPIO_PIN = 4    # GPIO pin 4
+GPIO_PIN = 4    # Using GPIO4 (physical pin 7)
 STATE_FILE = "/tmp/kronk_display.state"
 
 def write_state(state):
@@ -12,35 +12,27 @@ def write_state(state):
     try:
         with open(STATE_FILE, "w") as f:
             f.write(state)
-        print(f"State set to: {state}")
+        print(f"State set to: {state}", flush=True)
     except IOError as e:
-        print(f"Error writing state file: {e}")
+        print(f"Error writing state file: {e}", flush=True)
 
 def light_is_dim():
     """Called when the sensor detects dimness (pin goes HIGH)."""
-    print("Sensor: Light is DIM")
+    print("Sensor: Light is DIM", flush=True)
     write_state("dim")
 
 def light_is_bright():
     """Called when the sensor detects light (pin goes LOW)."""
-    print("Sensor: Light is BRIGHT")
+    print("Sensor: Light is BRIGHT", flush=True)
     write_state("bright")
 
 # --- INITIALIZATION ---
-print("Starting light controller...")
-
-# Check if we are in mock mode
-is_mock_mode = os.environ.get('GPIOZERO_PIN_FACTORY') == 'mock'
+print("Starting light controller...", flush=True)
 
 try:
-    if is_mock_mode:
-        # In mock mode, we CANNOT use pull_down
-        print("Running in MOCK mode.")
-        sensor = DigitalInputDevice(GPIO_PIN)
-    else:
-        # On the Pi, we NEED pull_down for the sensor
-        print("Running in HARDWARE mode.")
-        sensor = DigitalInputDevice(GPIO_PIN, pull_down=True)
+    # The correct argument is pull_up=False to enable the pull-down resistor.
+    # This works in both mock and hardware modes.
+    sensor = DigitalInputDevice(GPIO_PIN, pull_up=False) 
     
     sensor.when_activated = light_is_dim    # Pin went HIGH (dim)
     sensor.when_deactivated = light_is_bright # Pin went LOW (bright)
@@ -51,13 +43,11 @@ try:
     else:
         light_is_bright()
 
-    print("Controller is running. Waiting for sensor events.")
+    print("Controller is running. Waiting for sensor events.", flush=True)
     pause() # Keep the script alive
 
 except Exception as e:
-    print(f"Error initializing GPIO: {e}")
-    if not is_mock_mode:
-        print("Is the lgpio daemon running? (sudo systemctl start lgpiod)")
-    print("Falling back to running without sensor.")
+    print(f"Error initializing GPIO: {e}", flush=True)
+    print("Falling back to running without sensor.", flush=True)
     write_state("bright") # Default to bright if sensor fails
     pause()

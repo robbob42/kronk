@@ -32,7 +32,11 @@ print("Starting light controller...", flush=True)
 try:
     # The correct argument is pull_up=False to enable the pull-down resistor.
     # This works in both mock and hardware modes.
-    sensor = DigitalInputDevice(GPIO_PIN, pull_up=False) 
+    sensor = DigitalInputDevice(
+        GPIO_PIN, 
+        pull_up=False, 
+        bounce_time=1.0
+    )
     
     sensor.when_activated = light_is_dim    # Pin went HIGH (dim)
     sensor.when_deactivated = light_is_bright # Pin went LOW (bright)

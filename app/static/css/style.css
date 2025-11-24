@@ -391,3 +391,74 @@ body.is-dim {
     /* Comment this out if you still want to use the dim screen */
     /* pointer-events: none; */ 
 }
+
+/*
+ * --- Touch-Friendly Modal Overrides ---
+ */
+
+/* 1. Make the container scrollable if content gets too tall */
+.modal-content {
+    max-height: 85vh; /* Keep it within the screen height */
+    overflow-y: auto; /* Scroll internally if needed */
+}
+
+/* 2. Increase Title and General Text */
+#modalTitle {
+    font-size: 2.2rem; /* Much larger title */
+    margin-bottom: 1.5rem;
+}
+
+.modal-body {
+    font-size: 1.5rem; /* Larger base text for descriptions/notes */
+    line-height: 1.5;
+}
+
+.modal-body h3, 
+.modal-body h4 {
+    font-size: 1.8rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* 3. Make the Close 'X' Button Huge */
+.close-button {
+    font-size: 3.5rem; /* Very easy to tap */
+    padding: 0 1.5rem;
+    line-height: 1;
+}
+
+/* 4. Super-size the Transaction List */
+.transaction-list li {
+    padding: 1.25rem 0; /* More space between rows */
+    font-size: 1.4rem;
+}
+
+/* 5. User Selection Checklist (The most important touch targets) */
+.user-select-list li {
+    padding: 1.25rem 0; /* Large touch area */
+    font-size: 1.6rem;
+}
+
+/* Make the actual checkbox square physically larger */
+.user-select-list input[type="checkbox"] {
+    transform: scale(2.0); /* Double the standard size */
+    margin-right: 1.5rem;
+    margin-left: 0.5rem; /* Little breathing room */
+}
+
+/* 6. "Share" System Controls (+/- Buttons) */
+.share-button {
+    width: 60px;   /* Huge touch target */
+    height: 60px;
+    line-height: 55px; /* Vertically center the +/- */
+    font-size: 2.5rem;
+}
+
+.share-value {
+    font-size: 2rem;
+    min-width: 50px;
+}
+
+.calculated-split {
+    font-size: 1.6rem;
+}

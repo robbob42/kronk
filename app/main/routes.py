@@ -1,6 +1,6 @@
 from flask import render_template, request, abort
 from app.main import bp
-from app.models import Project, User
+from app.models import Project, User, Transaction
 
 @bp.route('/')
 def index():
@@ -10,7 +10,8 @@ def index():
 def admin():
     projects = Project.query.filter_by(is_active=True).order_by(Project.status.asc(), Project.priority.asc()).all()
     users = User.query.filter_by(is_active=True).order_by(User.name).all()
-    return render_template('admin.html', projects=projects, users=users)
+    transactions = Transaction.query.order_by(Transaction.timestamp.desc()).all()
+    return render_template('admin.html', projects=projects, users=users, transactions=transactions)
 
 @bp.route('/remote')
 def remote():

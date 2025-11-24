@@ -203,3 +203,15 @@ def get_display_state():
         return jsonify({'state': state})
     except FileNotFoundError:
         return jsonify({'state': 'bright'}) # Default to bright if file not found
+    
+@bp.route('/transactions/<int:transaction_id>', methods=['DELETE'])
+def delete_transaction(transaction_id):
+    transaction = Transaction.query.get_or_404(transaction_id)
+    
+    # Optional: You could restrict this to only negative amounts,
+    # but as an admin, you might want full control.
+    
+    db.session.delete(transaction)
+    db.session.commit()
+    
+    return jsonify({'message': 'Transaction deleted successfully.'})
